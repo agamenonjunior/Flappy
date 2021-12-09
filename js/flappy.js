@@ -76,3 +76,45 @@ function ContruirBarreiras(altura,largura, abertura, espaco, notificarPonto){
         })
     }
 }
+
+function Personagem(AlturaJogo) {
+    let voando = false
+
+    this.elemento = NovoElemento('img','personagem')
+    this.elemento.src = 'img/freedinosprite/png/Idle (1).png'
+    this.getPosicaoY = () =>parseInt(this.elemento.style.bottom.split('px')[0])
+    this.setPosicaoY = Posicao_Y =>this.elemento.style.bottom = `${Posicao_Y}px`
+
+    window.onkeydown = e => voando = true
+    window.onkeyup = e => voando = false
+
+    this.animar =()=>{
+        const novoY = this.getPosicaoY() + (voando ? 8 : -5 )
+        const alturaMaxima = AlturaJogo - this.elemento.clientHeight
+
+        if (novoY <= 0) {
+            this.setPosicaoY(0)
+        } else if(novoY >= alturaMaxima){
+            this.setPosicaoY(alturaMaxima)
+        }else{
+            this.setPosicaoY(novoY)
+        }
+    }
+
+    this.setPosicaoY(AlturaJogo / 2)
+
+}
+
+
+
+
+const barreiras = new ContruirBarreiras(700,1200,200, 400)
+const personagem = new Personagem(700)
+const AreadoJogo = document.querySelector('[ws-flappy]')
+AreadoJogo.appendChild(personagem.elemento)
+barreiras.pares.forEach(par => AreadoJogo.appendChild(par.elemento))
+
+setInterval(() => {
+    barreiras.animar()
+    personagem.animar()
+}, 20);

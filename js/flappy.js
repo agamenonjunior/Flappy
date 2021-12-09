@@ -41,5 +41,38 @@ function parDeBarreiras(altura, abertura, posicao_x){
 
 }
 
-const b = new parDeBarreiras(700,200,400)
-document.querySelector('[ws-flappy]').appendChild(b.elemento)
+//const b = new parDeBarreiras(700,200,800)
+//document.querySelector('[ws-flappy]').appendChild(b.elemento)
+
+function ContruirBarreiras(altura,largura, abertura, espaco, notificarPonto){
+    this.pares = [
+        //momento inicial
+        new parDeBarreiras(altura,abertura,largura),
+        new parDeBarreiras(altura,abertura,largura + espaco),
+        new parDeBarreiras(altura,abertura,largura + espaco * 2),
+        new parDeBarreiras(altura,abertura,largura + espaco * 3)
+
+    ]
+    const deslocamento = 3
+    //animacao
+    this.animar = () =>{
+        this.pares.forEach( par =>{
+            par.setPosicaoX(par.getPosicaoX() - deslocamento)
+
+            //quando o elemento sair da tela principal
+            if (par.getPosicaoX() < -par.getLargura()) {
+                //mundando de posicao
+                par.setPosicaoX(par.getPosicaoX() + espaco * this.pares.length)
+                //sorteando as barreiras
+                par.sortearAbertura()
+            }
+
+            const meio = largura/2
+            const cruzarOMeio = par.getPosicaoX()+ deslocamento >=meio && par.getPosicaoX() < meio
+            if (cruzarOMeio) {
+                notificarPonto()
+            }    
+
+        })
+    }
+}

@@ -55,5 +55,6 @@ align-items: center;
     color: white;
     font-weight: bold;
     font-size: 3rem;
+    z-index: 100;
 }
 

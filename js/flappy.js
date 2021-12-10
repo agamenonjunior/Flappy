@@ -108,13 +108,64 @@ function Personagem(AlturaJogo) {
 
 
 
-const barreiras = new ContruirBarreiras(700,1200,200, 400)
+
+/*
+setInterval(() => {
+    barreiras.animar()
+    personagem.animar()
+}, 20);
+*/
+
+function Progresso() {
+
+    this.elemento = NovoElemento('span','progresso')
+    this.atualizarPontos = pontos =>{
+        // colocando os pontos
+        this.elemento.innerHTML = pontos
+
+    }
+    this.atualizarPontos(0)
+    
+}
+
+function Jogo() {
+   let pontos = 0
+
+   const AreadoJogo = document.querySelector('[ws-flappy]')
+   const altura = AreadoJogo.clientHeight
+   const largura = AreadoJogo.clientWidth
+   const progresso = new Progresso()
+   const barreiras = new ContruirBarreiras(altura,largura, 200, 600, ()=> progresso.atualizarPontos(++pontos))
+   const personagem = new Personagem(altura)
+
+   AreadoJogo.appendChild(progresso.elemento)
+   AreadoJogo.appendChild(personagem.elemento)
+   barreiras.pares.forEach(par => AreadoJogo.appendChild(par.elemento))
+    
+   //iniciando o jogo
+   this.start = ()=>{
+        //loop do jogo
+        const temporizador = setInterval(() => {
+           barreiras.animar() 
+           personagem.animar() 
+        }, 20);
+   }
+}
+
+//PLAY do JOGO
+new Jogo().start()
+
+
+/**
+const barreiras = new ContruirBarreiras(700,1200,200, 600)
 const personagem = new Personagem(700)
 const AreadoJogo = document.querySelector('[ws-flappy]')
 AreadoJogo.appendChild(personagem.elemento)
+AreadoJogo.appendChild(new Progresso().elemento)
 barreiras.pares.forEach(par => AreadoJogo.appendChild(par.elemento))
 
 setInterval(() => {
     barreiras.animar()
     personagem.animar()
 }, 20);
+ */
